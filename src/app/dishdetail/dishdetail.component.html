@@ -1,5 +1,5 @@
 <div class="container"
-    fxLayout="row"
+    fxLayout="row wrap"
     fxLayout.sm="column"
     fxLayout.xs="column"
     fxLayoutAlign.gt-md="space-around center"
@@ -31,7 +31,7 @@
         <p matLine><span>{{c.comment}}</span></p>
         <p matLine><span>{{c.rating}} Stars </span></p>
         <p matLine>
-          <span> -- {{c.author}} {{c.date | date:'MMM d,y'}} </span>
+          <span> -- {{c.author}} {{c.date | date}} </span>
         </p>
       </mat-list-item>
     </mat-list>
