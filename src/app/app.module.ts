@@ -23,7 +23,7 @@ import { ContactComponent } from './contact/contact.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { DishService } from './services/dish.service';
-
+import { PromotionService } from './services/promotion.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +47,7 @@ import { DishService } from './services/dish.service';
     MatButtonModule,
     FontAwesomeModule
   ],
-  providers: [DishService],
+  providers: [DishService,PromotionService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
