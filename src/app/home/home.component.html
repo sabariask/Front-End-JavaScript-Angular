@@ -33,4 +33,18 @@
   </mat-card-content>
 </mat-card>
 
+<mat-card *ngIf="feature" fxFlex>
+  <mat-card-header>
+    <div mat-card-avatar></div>
+    <mat-card-title>
+      <h3>{{feature.name | uppercase}}</h3>
+    </mat-card-title>
+  </mat-card-header>
+  <img mat-card-image src={{feature.image}} alt={{feature.name}}>
+  <mat-card-content>
+    <p>{{feature.description}}
+    </p>
+  </mat-card-content>
+</mat-card>
+
 </div>
