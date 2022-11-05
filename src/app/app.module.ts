@@ -21,7 +21,7 @@ import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DishService } from './services/dish.service';
 import { PromotionService } from './services/promotion.service';
 import { LeaderService } from './services/leader.service';
@@ -64,7 +64,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatInputModule,
     MatCheckboxModule,
     MatSelectModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatProgressSpinnerModule
   ],
   providers: [DishService,PromotionService,LeaderService],
   bootstrap: [AppComponent],
