@@ -1,10 +1,5 @@
-<div class="container"
-    fxLayout="row wrap"
-    fxLayout.sm="column"
-    fxLayout.xs="column"
-    fxLayoutAlign.gt-md="space-around center"
-    fxLayoutGap="10px"
-    fxLayoutGap.xs="0">
+<div class="container" fxLayout="row wrap" fxLayout.sm="column" fxLayout.xs="column"
+  fxLayoutAlign.gt-md="space-around center" fxLayoutGap="10px" fxLayoutGap.xs="0">
 
   <div fxFlex="40" *ngIf="dish">
     <mat-card>
@@ -31,7 +26,8 @@
       </mat-card-actions>
     </mat-card>
     <div fxFlex [hidden]="dish">
-      <mat-spinner></mat-spinner><h4>Loading...Please Wait</h4>
+      <mat-spinner></mat-spinner>
+      <h4>Loading...Please Wait</h4>
     </div>
   </div>
 
@@ -46,6 +42,41 @@
         </p>
       </mat-list-item>
     </mat-list>
+    <mat-list>
+      <mat-list-item>
+        <p matLine>{{dishDetailForm.value.name}}</p>
+        <p>
+          {{value}}
+        </p>
+        <p matLine>{{dishDetailForm.value.comment}}</p>
+      </mat-list-item>
+    </mat-list>
+    <form novalidate [formGroup]="dishDetailForm" #fform="ngForm" (ngSubmit)="onSubmit()">
+      <p>
+        <mat-form-field matLine>
+          <mat-label>Name</mat-label>
+          <input type="text" matInput formControlName="name" required>
+          <mat-error *ngIf="formErrors.name">
+            {{formErrors.name}}
+          </mat-error>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-slider color="primary" min="1" max="5" step="1" thumbLabel tickInterval="1">
+          <input matSliderThumb [(ngModel)]="value">
+        </mat-slider>
+      </p>
+      <p>
+        <mat-form-field matLine>
+          <mat-label>Your Comment</mat-label>
+          <textarea matInput formControlName="comment" required></textarea>
+          <mat-error *ngIf="formErrors.comment">
+            {{formErrors.comment}}
+          </mat-error>
+        </mat-form-field>
+      </p>
+      <button type="submit" mat-button class="background-primary text-floral-white" [disabled]="!dishDetailForm.valid">Submit</button>
+    </form>
   </div>
 
 </div>

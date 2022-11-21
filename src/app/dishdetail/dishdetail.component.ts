@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { dishComment } from './../shared/dishComment';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Dish } from '../shared/dish';
 import { Location } from '@angular/common';
 import { DishService } from '../services/dish.service';
@@ -10,16 +12,55 @@ import { switchMap } from 'rxjs';
   styleUrls: ['./dishdetail.component.scss'],
 })
 export class DishdetailComponent implements OnInit {
+
+  @ViewChild('fform') dishForm:any;
+
+  formErrors:any = {
+    'name':'',
+    'comment':''
+  };
+
+  dishDetailForm!:FormGroup;
+
   dish: Dish | any;
   dishIds!: string[];
   prev!: string;
   next!: string;
+  comment!:dishComment;
+  value=0;
+
+  validationMessages:any = {
+    'name':{
+      'required':'Name is required.',
+      'minlength':'Name must be atleast 2 characters long.',
+      'maxlength':'Name cannot be more than 25 characters.'
+    },
+    'comment':{
+      'required':'Comment is required.'
+    }
+  }
 
   constructor(
     private dishService: DishService,
     private location: Location,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private fb:FormBuilder
+  ) {
+    this.createForm();
+  }
+
+  createForm(){
+    this.dishDetailForm = this.fb.group({
+      name:['',[Validators.required, Validators.minLength(2),Validators.maxLength(25)]],
+      comment:['',Validators.required],
+    })
+    this.dishDetailForm.valueChanges.subscribe(
+      (data)=>{
+        this.onValueChanged(data);
+      }
+    );
+    this.onValueChanged();
+  }
 
   ngOnInit(): void {
     this.dishService
@@ -35,6 +76,28 @@ export class DishdetailComponent implements OnInit {
       });
   }
 
+  onValueChanged(data?:any){
+    if(!this.dishDetailForm){
+      return;
+    }
+    const form = this.dishDetailForm;
+    for(const field in this.formErrors){
+      if(this.formErrors.hasOwnProperty(field)){
+        // clear previous error message
+        this.formErrors[field] = '';
+        const control = form.get(field);
+        if(control && control.dirty && !control.valid){
+          const messages = this.validationMessages[field];
+          for(const key in control.errors){
+            if(control.errors.hasOwnProperty(key)){
+              this.formErrors[field] += messages[key] + ' ';
+            }
+          }
+        }
+      }
+    }
+  }
+
   setPrevNext(dishId:string){
     const index = this.dishIds.indexOf(dishId);
     this.prev = this.dishIds[(this.dishIds.length + index-1) % this.dishIds.length];
@@ -44,4 +107,23 @@ export class DishdetailComponent implements OnInit {
   getBack(): void {
     this.location.back();
   }
+
+  // formatLabel(value: number): string {
+  //   if (value <= 5) {
+  //     return Math.round(value / 5)+'';
+  //   }
+
+  //   return `${value}`;
+  // }
+
+  onSubmit(){
+    this.comment = this.dishDetailForm.value;
+    console.log(this.comment);
+    this.dishDetailForm.reset({
+      name:'',
+      comment:''
+    });
+    this.dishForm.resetForm();
+  }
+
 }
