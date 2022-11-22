@@ -27,13 +27,15 @@ export class DishdetailComponent implements OnInit {
   prev!: string;
   next!: string;
   comment!:dishComment;
-  value=0;
+  gridsize:number=0;
+
+
 
   validationMessages:any = {
     'name':{
-      'required':'Name is required.',
-      'minlength':'Name must be atleast 2 characters long.',
-      'maxlength':'Name cannot be more than 25 characters.'
+      'required':'Author name is required.',
+      'minlength':'Author name must be atleast 2 characters long.',
+      'maxlength':'Author name cannot be more than 25 characters.'
     },
     'comment':{
       'required':'Comment is required.'
@@ -96,6 +98,11 @@ export class DishdetailComponent implements OnInit {
         }
       }
     }
+  }
+
+
+  updateSetting(event:any) {
+    this.gridsize = event.value;
   }
 
   setPrevNext(dishId:string){

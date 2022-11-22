@@ -31,7 +31,7 @@
     </div>
   </div>
 
-  <div fxFlex *ngIf="dish">
+  <div fxFlex="40" *ngIf="dish">
     <mat-list>
       <h1 matLine>Comments</h1>
       <mat-list-item *ngFor="let c of dish.comments">
@@ -42,13 +42,11 @@
         </p>
       </mat-list-item>
     </mat-list>
-    <mat-list>
+    <mat-list *ngIf="dishDetailForm.valid">
       <mat-list-item>
-        <p matLine>{{dishDetailForm.value.name}}</p>
-        <p>
-          {{value}}
-        </p>
         <p matLine>{{dishDetailForm.value.comment}}</p>
+        <p matLine>{{gridsize.value}} Stars</p>
+        <p matLine>--{{dishDetailForm.value.name}}</p>
       </mat-list-item>
     </mat-list>
     <form novalidate [formGroup]="dishDetailForm" #fform="ngForm" (ngSubmit)="onSubmit()">
@@ -62,8 +60,8 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-slider color="primary" min="1" max="5" step="1" thumbLabel tickInterval="1">
-          <input matSliderThumb [(ngModel)]="value">
+        <mat-slider color="primary" min="1" max="5" step="1" thumbLabel tickInterval="1" #gridsize (change)="updateSetting($event)" (value)="gridsize">
+          <input matSliderThumb>
         </mat-slider>
       </p>
       <p>
