@@ -8,7 +8,7 @@
           <h3>{{dish.name | uppercase}}</h3>
         </mat-card-title>
       </mat-card-header>
-      <img mat-card-image [src]="dish.image" alt="">
+      <img mat-card-image src="{{BaseURL + dish.image}}" alt="">
       <mat-card-content>
         <p>{{dish.description}}</p>
       </mat-card-content>
@@ -25,9 +25,13 @@
         </button>
       </mat-card-actions>
     </mat-card>
-    <div fxFlex [hidden]="dish">
+    <div fxFlex [hidden]="dish || errorMsg">
       <mat-spinner></mat-spinner>
       <h4>Loading...Please Wait</h4>
+    </div>
+    <div fxFlex *ngIf="errorMsg">
+      <h2>Error</h2>
+      <h4>{{ errorMsg }}</h4>
     </div>
   </div>
 
@@ -46,7 +50,7 @@
       <mat-list-item>
         <p matLine>{{dishDetailForm.value.comment}}</p>
         <p matLine>{{gridsize.value}} Stars</p>
-        <p matLine>--{{dishDetailForm.value.name}}</p>
+        <p matLine>-- {{dishDetailForm.value.name}} </p>
       </mat-list-item>
     </mat-list>
     <form novalidate [formGroup]="dishDetailForm" #fform="ngForm" (ngSubmit)="onSubmit()">
@@ -60,7 +64,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-slider color="primary" min="1" max="5" step="1" thumbLabel tickInterval="1" #gridsize (change)="updateSetting($event)" (value)="gridsize">
+        <mat-slider color="primary" min="1" max="5" step="1" formControlName="star" thumbLabel tickInterval="1" #gridsize (change)="updateSetting($event)" (value)="gridsize">
           <input matSliderThumb>
         </mat-slider>
       </p>
