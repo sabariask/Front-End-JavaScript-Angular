@@ -1,18 +1,38 @@
 import { dishComment } from './../shared/dishComment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit, Input, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Inject, AfterViewInit } from '@angular/core';
 import { Dish } from '../shared/dish';
 import { Location } from '@angular/common';
 import { DishService } from '../services/dish.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { Comment } from '../shared/comment';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 @Component({
   selector: 'app-dishdetail',
   templateUrl: './dishdetail.component.html',
   styleUrls: ['./dishdetail.component.scss'],
+  animations: [
+    trigger('visibility', [
+      state(
+        'shown',
+        style({
+          transform: 'scale(1.0)',
+          opacity: 1,
+        })
+      ),
+      state(
+        'hidden',
+        style({
+          transform: 'scale(0.5)',
+          opacity: 0,
+        })
+      ),
+      transition('hidden => shown', animate('0.5s ease-in-out'))
+    ]),
+  ],
 })
-export class DishdetailComponent implements OnInit {
+export class DishdetailComponent implements OnInit, AfterViewInit {
   @ViewChild('fform') dishForm: any;
 
   formErrors: any = {
@@ -30,6 +50,7 @@ export class DishdetailComponent implements OnInit {
   gridsize: number = 0;
   errorMsg: string | undefined;
   dishCopy: Dish | undefined;
+  visibility = 'shown';
 
   validationMessages: any = {
     name: {
@@ -77,16 +98,24 @@ export class DishdetailComponent implements OnInit {
       .subscribe((dishIds) => (this.dishIds = dishIds));
     this.route.params
       .pipe(
-        switchMap((params: Params) => this.dishService.getDish(params['id']))
+        switchMap((params: Params) => {
+          this.visibility = 'hidden';
+          return this.dishService.getDish(params['id'])
+        })
       )
       .subscribe(
         (dish: any) => {
           this.dish = dish;
           this.dishCopy = dish;
           this.setPrevNext(dish?.id);
+          this.visibility = 'shown';
         },
         (errMsg) => (this.errorMsg = <any>errMsg)
       );
+  }
+
+  ngAfterViewInit(): void {
+      this.visibility = 'shown';
   }
 
   onValueChanged(data?: any) {
